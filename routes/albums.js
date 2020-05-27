@@ -1,11 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { index, show } = require('../controllers/album_controller');
+const { index, show, store } = require('../controllers/album_controller');
+const albumValidationRules = require('../validation_rules/album');
 
 //GET
 router.get('/', index)
 
 //GET /:albumId
 router.get('/:albumId', show);
+
+//POST
+router.post('/', albumValidationRules.createAlbumRules, store)
 
 module.exports = router;
