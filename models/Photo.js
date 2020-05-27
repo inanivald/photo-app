@@ -1,5 +1,5 @@
 /**
- * Book model
+ * Photo model
  */
 
 module.exports = (bookshelf) => {
