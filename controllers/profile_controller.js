@@ -3,7 +3,7 @@
  */
 
 const { matchedData, validationResult } = require('express-validator');
-const { Photo, User } = require('../models');
+const { Photo, User, Album } = require('../models');
 
  //GET
 const getProfile = async (req, res) => {
@@ -54,8 +54,8 @@ const getPhotos = async (req, res) => {
 
 //POST /photos
 
-const addPhotos = async (req, res) => {
-
+const addPhoto = async (req, res) => {
+	console.log(req.body)
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		console.log("Add photo to profile request failed validation:", errors.array());
@@ -67,8 +67,8 @@ const addPhotos = async (req, res) => {
 	}
 
 	try {
-		const photo = await Photo.fetchById(req.body.data.photo.id);
-
+		const photo = await Photo.fetchById(req.body.photo_id);
+		
 		const user = await User.fetchById(req.user.data.id);
 
 		const result = await user.photos().attach(photo);
@@ -87,8 +87,66 @@ const addPhotos = async (req, res) => {
 	}
 }
 
+//GET /albums
+
+const getAlbums = async (req, res) => {
+	
+	let user = null;
+	try {
+		user = await User.fetchById(req.user.data.id, { withRelated: 'albums' });
+	} catch (err) {
+		console.error(err);
+		res.sendStatus(404);
+		return;
+	}
+
+	// get this user's albums
+	const albums = user.related('albums');
+
+	res.send({
+		status: 'success',
+		data: {
+			albums,
+		},
+	});
+}
+
+const addAlbum = async (req, res) => {
+	console.log(req.body)
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		console.log("Add photo to profile request failed validation:", errors.array());
+		res.status(422).send({
+			status: 'fail',
+			data: errors.array(),
+		});
+		return;
+	}
+
+	try {
+		const album = await Album.fetchById(req.body.album_id);
+		
+		const user = await User.fetchById(req.user.data.id);
+
+		const result = await user.albums().attach(album);
+
+		res.status(201).send({
+			status: 'success',
+			data: result,
+		});
+
+	} catch (error) {
+		res.status(500).send({
+			status: 'error',
+			message: 'Exception thrown when trying to add album to profile.',
+		});
+		throw error;
+	}
+}
 module.exports = {
 	getProfile,
 	getPhotos,
-	addPhotos,
+	addPhoto,
+	getAlbums,
+	addAlbum
 }

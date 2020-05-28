@@ -9,7 +9,7 @@ module.exports = (bookshelf) => {
 			return this.belongsTo('Album');   
 		},
 		user() {
-			return this.belongsTo('User');
+			return this.belongsToMany('User');
 		}
 	}, {
 		fetchById(id, fetchOptions = {}) {

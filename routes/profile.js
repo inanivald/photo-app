@@ -9,7 +9,15 @@ router.get('/', profileController.getProfile);
 router.get('/photos', profileController.getPhotos);
 
 /* Add photo */
-router.post('/photos', profileController.addPhotos);
+router.post('/photos', profileController.addPhoto);
+
+/* Get albums */
+router.get('/albums', profileController.getAlbums);
+
+/* Add album */
+router.post('/albums', profileController.addAlbum);
+
+
 
 
 module.exports = router;
