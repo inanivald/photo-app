@@ -8,7 +8,7 @@ const index = async (req, res) => {
 	res.send({
 		status: 'success',
 		data: {
-			books: all_photos
+			photos: all_photos
 		}
 	});
 }

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { index, show, store } = require('../controllers/album_controller');
-const albumValidationRules = require('../validation_rules/album');
+const { createAlbumRules } = require('../validation_rules/album');
 
 //GET
 router.get('/', index)
@@ -10,6 +10,6 @@ router.get('/', index)
 router.get('/:albumId', show);
 
 //POST
-router.post('/', albumValidationRules.createAlbumRules, store)
+router.post('/', createAlbumRules, store)
 
 module.exports = router;
