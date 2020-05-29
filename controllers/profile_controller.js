@@ -42,7 +42,8 @@ const getPhotos = async (req, res) => {
 	}
 
 	// get this user's photos
-	const photos = user.related('photos');
+	user = await User.fetchById(req.user.data.id, { withRelated: 'photos' });
+	const photos = await Photo.where("user_id", user.id).fetchAll();
 
 	res.send({
 		status: 'success',
@@ -52,10 +53,35 @@ const getPhotos = async (req, res) => {
 	});
 }
 
-//POST /photos
+//GET /photo
+const getPhoto = async (req, res) => {
+	
+	try {
+		const photo = await new Photo({
+			id: req.params.photoId,
+			user_id: req.user.data.id,
+		}).fetch();
 
+
+		res.send({
+			status: 'success',
+			data: {
+				photo,
+			},
+		});
+
+	} catch (error) {
+		res.status(401).send({
+			status: 'fail',
+			data: 'You are not authorized to see this photo.',
+		});
+		throw error;
+	}
+}
+
+//POST /photos
 const addPhoto = async (req, res) => {
-	console.log(req.body)
+
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		console.log("Add photo to profile request failed validation:", errors.array());
@@ -65,17 +91,16 @@ const addPhoto = async (req, res) => {
 		});
 		return;
 	}
-
+	const validData = matchedData(req);
 	try {
-		const photo = await Photo.fetchById(req.body.photo_id);
-		
-		const user = await User.fetchById(req.user.data.id);
+		const photo = await new Photo(validData).save();
+		console.log("Created new photo successfully:", photo);
 
-		const result = await user.photos().attach(photo);
-
-		res.status(201).send({
+		res.send({
 			status: 'success',
-			data: result,
+			data: {
+				photo,
+			},
 		});
 
 	} catch (error) {
@@ -88,7 +113,6 @@ const addPhoto = async (req, res) => {
 }
 
 //GET /albums
-
 const getAlbums = async (req, res) => {
 	
 	let user = null;
@@ -101,7 +125,8 @@ const getAlbums = async (req, res) => {
 	}
 
 	// get this user's albums
-	const albums = user.related('albums');
+	user = await User.fetchById(req.user.data.id, { withRelated: 'albums' });
+	const albums = await Album.where("user_id", user.id).fetchAll();
 
 	res.send({
 		status: 'success',
@@ -111,42 +136,106 @@ const getAlbums = async (req, res) => {
 	});
 }
 
+
+//GET /album
+const getAlbum = async (req, res) => {
+	
+	try {
+		const album = await new Album({
+			id: req.params.albumId,
+			user_id: req.user.data.id,
+		}).fetch({ withRelated: 'photos' });
+
+
+		res.send({
+			status: 'success',
+			data: {
+				album,
+			},
+		});
+
+	} catch (error) {
+		res.status(401).send({
+			status: 'fail',
+			data: 'You are not authorized to see this album.',
+		});
+		throw error;
+	}
+}
+
+//POST /album
 const addAlbum = async (req, res) => {
-	console.log(req.body)
+	
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		console.log("Add photo to profile request failed validation:", errors.array());
 		res.status(422).send({
 			status: 'fail',
 			data: errors.array(),
 		});
 		return;
 	}
+	const validData = matchedData(req);
 
 	try {
-		const album = await Album.fetchById(req.body.album_id);
-		
-		const user = await User.fetchById(req.user.data.id);
+		const album = await new Album(validData).save();
+		console.log("Created new album successfully:", album);
 
-		const result = await user.albums().attach(album);
-
-		res.status(201).send({
+		res.send({
 			status: 'success',
-			data: result,
+			data: {
+				album,
+			},
 		});
 
 	} catch (error) {
 		res.status(500).send({
 			status: 'error',
-			message: 'Exception thrown when trying to add album to profile.',
+			message: 'You can not add this album to profile.',
 		});
 		throw error;
 	}
 }
+
+//DELETE album
+const deleteAlbum = async (req, res) => {
+	
+	try {
+		user = await User.fetchById(req.user.data.id, { withRelated: 'albums' });
+	} catch (err) {
+		console.error(err);
+		res.sendStatus(404);
+		return;
+	}
+
+	try {
+		
+		const album = await new Album({
+			id: req.params.albumId,
+			user_id: req.user.data.id}).destroy().then().photos.detached()
+
+		res.send({
+			status: 'success',
+			data: {
+				album,
+			},
+		});
+
+	} catch (error) {
+		res.status(401).send({
+			status: 'fail',
+			data: 'You are not authorized to delete this album.',
+		});
+		throw error;
+	}
+}
+
 module.exports = {
 	getProfile,
 	getPhotos,
+	getPhoto,
 	addPhoto,
 	getAlbums,
-	addAlbum
+	getAlbum,
+	addAlbum,
+	deleteAlbum,
 }

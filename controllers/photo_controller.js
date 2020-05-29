@@ -13,7 +13,7 @@ const index = async (req, res) => {
 	});
 }
 
-//GET /:bookId
+//GET /:photoId
 const show = async (req, res) => {
 	const photo = await models.Photo.fetchById(req.params.photoId, { withRelated: ['album'] });
 
