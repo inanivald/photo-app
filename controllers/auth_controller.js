@@ -20,7 +20,6 @@ const login = async (req, res) => {
 		return;
 	}
 
-	// construct jwt payload
 	const payload = {
 		data: {
 			id: user.get('id'),
@@ -28,7 +27,6 @@ const login = async (req, res) => {
 		},
 	};
 
-	// sign payload and get access-token
 	const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_LIFETIME || '1h' });
 
 
@@ -43,7 +41,6 @@ const login = async (req, res) => {
 
 
 //POST /register
-
 const register = async (req, res) => {
 	
 	const errors = validationResult(req);
@@ -88,7 +85,6 @@ const register = async (req, res) => {
 }
 
 //Get token from HTTP headers
-
 const getTokenFromHeaders = (req) => {
 	if (!req.headers.authorization) {
 		return false;

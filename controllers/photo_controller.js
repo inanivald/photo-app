@@ -27,7 +27,6 @@ const show = async (req, res) => {
 
 //POST
 const store = async (req, res) => {
-	// Finds the validation errors in this request and wraps them in an object with handy functions
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		console.log("Create photo request failed validation:", errors.array());

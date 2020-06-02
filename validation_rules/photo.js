@@ -13,9 +13,9 @@ const createPhotoRules = [
 	// 	const album = await new Album().fetch({ withRelated: 'user'});
 	// 	const user = await new User().fetch();
 	// 	console.log(value)
-	// 	console.log(album.attributes.user_id)
+	// 	console.log(album.attributes.user)
 	// 	console.log(user)
-	// 	if (user.id == album.attributes.user) {
+	// 	if (value == album.attributes.user) {
 	// 		return Promise.resolve();
 	// 	} return Promise.reject('You can not add photos to another users album.');
 	// }),
@@ -26,8 +26,6 @@ const createPhotoRules = [
 		} return Promise.reject('You can not add photos to another user.');
 	}),
 ];
-
-
 
 module.exports = {
 	createPhotoRules,

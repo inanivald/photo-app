@@ -14,7 +14,7 @@ const index = async (req, res) => {
 }
 
 const show = async (req, res) => {
-	const album = await new models.Album({ id: req.params.albumId }).fetch({ withRelated: 'photos'});    // select * from books where id = 1
+	const album = await new models.Album({ id: req.params.albumId }).fetch({ withRelated: 'photos'});  
 
 	res.send({
 		status: 'success',
@@ -25,7 +25,6 @@ const show = async (req, res) => {
 }
 //POST
 const store = async (req, res) => {
-	// Finds the validation errors in this request and wraps them in an object with handy functions
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		console.log("Create album request failed validation:", errors.array());
