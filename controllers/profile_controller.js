@@ -79,12 +79,11 @@ const getPhoto = async (req, res) => {
 	}
 }
 
-//POST /photos
+//POST /photo
 const addPhoto = async (req, res) => {
 
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		console.log("Add photo to profile request failed validation:", errors.array());
 		res.status(422).send({
 			status: 'fail',
 			data: errors.array(),
@@ -94,8 +93,7 @@ const addPhoto = async (req, res) => {
 	const validData = matchedData(req);
 	try {
 		const photo = await new Photo(validData).save();
-		console.log("Created new photo successfully:", photo);
-
+		
 		res.send({
 			status: 'success',
 			data: {
@@ -107,6 +105,40 @@ const addPhoto = async (req, res) => {
 		res.status(500).send({
 			status: 'error',
 			message: 'Exception thrown when trying to add photo to profile.',
+		});
+		throw error;
+	}
+}
+
+//DELETE /photo
+const deletePhoto = async (req, res) => {
+	
+	try {
+		user = await User.fetchById(req.user.data.id, { withRelated: 'photos' });
+	} catch (err) {
+		console.error(err);
+		res.sendStatus(404);
+		return;
+	}
+
+	try {
+			const photo = await new Photo({
+			id: req.params.photoId,
+			user_id: req.user.data.id}).destroy()
+			// .then.albums.detach();
+
+
+		res.send({
+			status: 'success',
+			data: {
+				photo,
+			},
+		});
+
+	} catch (error) {
+		res.status(401).send({
+			status: 'fail',
+			data: 'You are not authorized to delete this photo.',
 		});
 		throw error;
 	}
@@ -208,10 +240,11 @@ const deleteAlbum = async (req, res) => {
 	}
 
 	try {
-		
-		const album = await new Album({
+			const album = await new Album({
 			id: req.params.albumId,
-			user_id: req.user.data.id}).destroy().then().photos.detached()
+			user_id: req.user.data.id}).destroy()
+			// .then.photos.detach();
+
 
 		res.send({
 			status: 'success',
@@ -234,6 +267,7 @@ module.exports = {
 	getPhotos,
 	getPhoto,
 	addPhoto,
+	deletePhoto,
 	getAlbums,
 	getAlbum,
 	addAlbum,

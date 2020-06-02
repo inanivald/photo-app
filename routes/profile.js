@@ -16,6 +16,9 @@ router.get('/photos/:photoId', profileController.getPhoto);
 /* Add photo */
 router.post('/photos', createPhotoRules, profileController.addPhoto);
 
+/* Delete photo */
+router.delete('/photos/:photoId', profileController.deletePhoto);
+
 /* Get albums */
 router.get('/albums', profileController.getAlbums);
 
@@ -27,9 +30,6 @@ router.post('/albums', createAlbumRules, profileController.addAlbum);
 
 /* Delete album */
 router.delete('/albums/:albumId', profileController.deleteAlbum);
-
-
-
 
 
 module.exports = router;
