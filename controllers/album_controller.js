@@ -25,36 +25,11 @@ const show = async (req, res) => {
 }
 //POST
 const store = async (req, res) => {
-	const errors = validationResult(req);
-	if (!errors.isEmpty()) {
-		console.log("Create album request failed validation:", errors.array());
-		res.status(422).send({
-			status: 'fail',
-			data: errors.array(),
-		});
-		return;
-	}
-
-	const validData = matchedData(req);
-
-	try {
-		const album = await new models.Album(validData).save();
-		console.log("Created new album successfully:", album);
-
-		res.send({
-			status: 'success',
-			data: {
-				album,
-			},
-		});
-
-	} catch (error) {
-		res.status(500).send({
-			status: 'error',
-			message: 'Exception thrown in database when creating a new album.',
-		});
-		throw error;
-	}
+	res.status(405).send({
+		status: 'fail',
+		message: 'Method Not Allowed.',
+	});
+	
 }
 
 module.exports = {
