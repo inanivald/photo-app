@@ -7,7 +7,7 @@
 #
 # Host: eu-cdbr-west-03.cleardb.net (MySQL 5.6.47-log)
 # Database: heroku_4b5fcd2cd833e68
-# Generation Time: 2020-06-02 10:57:58 +0000
+# Generation Time: 2020-07-08 08:59:09 +0000
 # ************************************************************
 
 
@@ -37,7 +37,6 @@ LOCK TABLES `albums` WRITE;
 
 INSERT INTO `albums` (`id`, `title`, `user_id`)
 VALUES
-	(1,'Flowers',1),
 	(2,'People',2),
 	(3,'Food',3),
 	(4,'Animals',4),
@@ -45,37 +44,39 @@ VALUES
 	(6,'Misc',1),
 	(7,'Nature',7),
 	(8,'Fruits',1),
-	(27,'Forest',1);
+	(27,'Forest',1),
+	(28,'Mixed',1);
 
 /*!40000 ALTER TABLE `albums` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
-# Dump of table albums_users
+# Dump of table albums_photos
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `albums_users`;
+DROP TABLE IF EXISTS `albums_photos`;
 
-CREATE TABLE `albums_users` (
-  `album_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
+CREATE TABLE `albums_photos` (
+  `photo_id` int(11) NOT NULL,
+  `album_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-LOCK TABLES `albums_users` WRITE;
-/*!40000 ALTER TABLE `albums_users` DISABLE KEYS */;
+LOCK TABLES `albums_photos` WRITE;
+/*!40000 ALTER TABLE `albums_photos` DISABLE KEYS */;
 
-INSERT INTO `albums_users` (`album_id`, `user_id`)
+INSERT INTO `albums_photos` (`photo_id`, `album_id`)
 VALUES
-	(1,1),
+	(1,2),
 	(2,2),
-	(3,3),
-	(4,4),
-	(5,5),
-	(7,7),
+	(3,2),
+	(4,1),
+	(5,1),
 	(6,1),
-	(8,1);
+	(43,1),
+	(47,2),
+	(43,6);
 
-/*!40000 ALTER TABLE `albums_users` ENABLE KEYS */;
+/*!40000 ALTER TABLE `albums_photos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -89,7 +90,6 @@ CREATE TABLE `photos` (
   `title` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
   `comment` varchar(255) DEFAULT NULL,
-  `album_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -97,69 +97,35 @@ CREATE TABLE `photos` (
 LOCK TABLES `photos` WRITE;
 /*!40000 ALTER TABLE `photos` DISABLE KEYS */;
 
-INSERT INTO `photos` (`id`, `title`, `url`, `comment`, `album_id`, `user_id`)
+INSERT INTO `photos` (`id`, `title`, `url`, `comment`, `user_id`)
 VALUES
-	(1,'Boy in blue hoodie','https://unsplash.com/photos/PNQ2SMlsyOc',NULL,2,2),
-	(2,'Woman in yellow shirt','https://unsplash.com/photos/i-JkONlmR_o',NULL,2,2),
-	(3,'Man in brown hat','https://unsplash.com/photos/0tEEFB_Ppwg',NULL,2,2),
-	(4,'Orange flowers','https://unsplash.com/photos/koy6FlCCy5s',NULL,1,1),
-	(5,'Tulips','https://unsplash.com/photos/eHlVZcSrjfg',NULL,1,1),
-	(6,'Cherry blossoms','https://unsplash.com/photos/sKJ7zSylUao',NULL,1,1),
-	(7,'Pizza','https://unsplash.com/photos/MNtag_eXMKw',NULL,3,3),
-	(8,'Avocado','https://unsplash.com/photos/9aOswReDKPo',NULL,3,3),
-	(9,'Pancakes','https://unsplash.com/photos/8Nc_oQsc2qQ',NULL,3,3),
-	(10,'Icecream','https://unsplash.com/photos/TLD6iCOlyb0',NULL,3,3),
-	(11,'Meatballs','https://unsplash.com/photos/OFismyezPnY',NULL,3,3),
-	(12,'Fox','https://unsplash.com/photos/CQl3Y5bV6FA',NULL,4,4),
-	(13,'Paris','https://unsplash.com/photos/QAwciFlS1g4',NULL,5,5),
-	(14,'New York','https://unsplash.com/photos/wh-7GeXxItI',NULL,5,5),
-	(15,'Barcelona','https://unsplash.com/photos/LSscVPEyQpI',NULL,5,5),
-	(16,'Malmö','https://unsplash.com/photos/dEOIskG3Oes',NULL,5,5),
-	(17,'Ocean','https://unsplash.com/photos/oR0uERTVyD0',NULL,6,1),
-	(24,'Barcelona','https://unsplash.com/photos/LSscVPEyQpI',NULL,7,7),
-	(25,'Pink Rose','https://unsplash.com/photos/x68FaxTyx90',NULL,1,1),
-	(26,'Forest','https://unsplash.com/photos/LSscVPEyQpI',NULL,7,7),
-	(35,'Barcelona','https://unsplash.com/photos/LSscVPEyQpI',NULL,5,5),
-	(36,'Forest','https://unsplash.com/photos/LSscVPEyQpI',NULL,8,1),
-	(40,'Forest','https://unsplash.com/photos/LSscVPEyQpI',NULL,8,1),
-	(42,'Forest','https://unsplash.com/photos/LSscVPEyQpI',NULL,2,1);
+	(1,'Boy in blue hoodie','https://unsplash.com/photos/PNQ2SMlsyOc',NULL,2),
+	(2,'Woman in yellow shirt','https://unsplash.com/photos/i-JkONlmR_o',NULL,2),
+	(3,'Man in brown hat','https://unsplash.com/photos/0tEEFB_Ppwg',NULL,2),
+	(4,'Orange flowers','https://unsplash.com/photos/koy6FlCCy5s',NULL,1),
+	(5,'Tulips','https://unsplash.com/photos/eHlVZcSrjfg',NULL,1),
+	(6,'Cherry blossoms','https://unsplash.com/photos/sKJ7zSylUao',NULL,1),
+	(7,'Pizza','https://unsplash.com/photos/MNtag_eXMKw',NULL,3),
+	(8,'Avocado','https://unsplash.com/photos/9aOswReDKPo',NULL,3),
+	(9,'Pancakes','https://unsplash.com/photos/8Nc_oQsc2qQ',NULL,3),
+	(10,'Icecream','https://unsplash.com/photos/TLD6iCOlyb0',NULL,3),
+	(11,'Meatballs','https://unsplash.com/photos/OFismyezPnY',NULL,3),
+	(12,'Fox','https://unsplash.com/photos/CQl3Y5bV6FA',NULL,4),
+	(13,'Paris','https://unsplash.com/photos/QAwciFlS1g4',NULL,5),
+	(14,'New York','https://unsplash.com/photos/wh-7GeXxItI',NULL,5),
+	(15,'Barcelona','https://unsplash.com/photos/LSscVPEyQpI',NULL,5),
+	(16,'Malmö','https://unsplash.com/photos/dEOIskG3Oes',NULL,5),
+	(17,'Ocean','https://unsplash.com/photos/oR0uERTVyD0',NULL,1),
+	(24,'Barcelona','https://unsplash.com/photos/LSscVPEyQpI',NULL,7),
+	(25,'Pink Rose','https://unsplash.com/photos/x68FaxTyx90',NULL,1),
+	(26,'Forest','https://unsplash.com/photos/LSscVPEyQpI',NULL,7),
+	(35,'Barcelona','https://unsplash.com/photos/LSscVPEyQpI',NULL,5),
+	(40,'Forest','https://unsplash.com/photos/LSscVPEyQpI',NULL,1),
+	(42,'Forest','https://unsplash.com/photos/LSscVPEyQpI',NULL,1),
+	(43,'Cough','https://unsplash.com/photos/avt0TnE_NS0',NULL,1),
+	(47,'Woman in yellow dress','https://unsplash.com/photos/iyBO7fdK3pE',NULL,1);
 
 /*!40000 ALTER TABLE `photos` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
-# Dump of table photos_users
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `photos_users`;
-
-CREATE TABLE `photos_users` (
-  `photo_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-LOCK TABLES `photos_users` WRITE;
-/*!40000 ALTER TABLE `photos_users` DISABLE KEYS */;
-
-INSERT INTO `photos_users` (`photo_id`, `user_id`)
-VALUES
-	(14,5),
-	(5,5),
-	(1,1),
-	(2,1),
-	(3,2),
-	(4,2),
-	(5,3),
-	(6,3),
-	(8,4),
-	(9,4),
-	(10,5),
-	(11,1),
-	(6,4),
-	(12,7),
-	(13,7);
-
-/*!40000 ALTER TABLE `photos_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
