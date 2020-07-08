@@ -1,15 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const { index, show, store } = require('../controllers/album_controller');
-const { createAlbumRules } = require('../validation_rules/album');
+const { index, storeAlbum, show, addPhotos, removePhoto, destroy } = require('../controllers/album_controller');
+const { addPhotosRules, createAlbumRules } = require('../validation_rules/album');
 
-//GET
+//GET /albums
 router.get('/', index)
 
-//GET /:albumId
+//GET /albums/:albumId
 router.get('/:albumId', show);
 
-//POST
-router.post('/', createAlbumRules, store)
+//POST /albums
+router.post('/', createAlbumRules, storeAlbum)
+
+// POST /albums/:albumId
+router.post('/:albumId/photos', addPhotosRules, addPhotos);
+
+// DELETE /albums/:albumId
+router.delete('/:albumId', destroy);
+
+// DELETE /albums/:albumId/photos/:photoId
+router.delete('/:albumId/photos/:photoId', removePhoto);
 
 module.exports = router;

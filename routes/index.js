@@ -9,18 +9,15 @@ router.get('/', (req, res) => {
 	res.send({ status: 'Inas photo app' });
 });
 
-router.use('/albums', require('./albums'));
-router.use('/photos', require('./photos'));
-router.use('/users', require('./users'));
+
+router.use('/albums', [auth.validateJwtToken], require('./albums'));
+router.use('/photos', [auth.validateJwtToken], require('./photos'));
 
 // login and get JWT access-token
 router.post('/login', authController.login);
 
 // register user
 router.post('/register', [userValidationRules.createRules], authController.register);
-
-// validate JWTs
-router.use('/profile', [auth.validateJwtToken], require('./profile'));
 
 
 module.exports = router;

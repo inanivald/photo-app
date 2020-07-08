@@ -8,10 +8,10 @@ module.exports = (bookshelf) => {
 	return bookshelf.model('User', {
 		tableName: 'users',
 		albums() {
-			return this.belongsToMany('Album');
+			return this.hasMany('Album');
         },
         photos() {
-			return this.belongsToMany('Photo');
+			return this.hasMany('Photo');
 		}
 	}, {
 		hashSaltRounds: 10,

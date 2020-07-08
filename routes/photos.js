@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const { index, show, store } = require('../controllers/photo_controller.js');
+const { index, store, show, destroy } = require('../controllers/photo_controller.js');
 const { createPhotoRules } = require('../validation_rules/photo');
 
-//GET
+//GET /photos
 router.get('/', index);
 
-//GET /:photoId
+//GET /photos/:photoId
 router.get('/:photoId', show);
 
-//POST
+//POST /photos
 router.post('/', createPhotoRules, store)
 
-
+// DELETE /photos/:photoId
+router.delete('/:photoId', destroy);
 
 module.exports = router;
